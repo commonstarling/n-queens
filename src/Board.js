@@ -85,6 +85,8 @@
 
       if (answer > 1) {
         return true;
+      } else {
+      return false;
       }
     },
 
@@ -108,11 +110,33 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var boardRows = this.rows();
+      var columnValues = [];
+
+      boardRows.forEach(function(row) {
+        columnValues.push(row[colIndex]);
+      });
+
+      var answer = columnValues.reduce(function(a, b) {
+        return a + b;
+      });
+      if (answer > 1) {
+        return true;
+      } else {
+      return false;
+      }// fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+      var boardRows = this.rows();
+
+      for (var i = 0; i < boardRows.length; i++) {
+        var result = this.hasColConflictAt(i);
+        if (result === true) {
+          return true;
+        }
+      }
       return false; // fixme
     },
 
