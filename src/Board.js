@@ -86,7 +86,7 @@
       if (answer > 1) {
         return true;
       } else {
-      return false;
+        return false;
       }
     },
 
@@ -123,7 +123,7 @@
       if (answer > 1) {
         return true;
       } else {
-      return false;
+        return false;
       }// fixme
     },
 
@@ -147,12 +147,55 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var boardRows = this.rows();
+      var diagonals = [];
+
+      //Loop through boardRows, and for each index
+      for (var i = 0; i < boardRows.length; i++) {
+        for (var j = 0; j < boardRows[i].length; j++) {
+          var result = this._getFirstRowColumnIndexForMajorDiagonalOn(i, j);
+          if (result === majorDiagonalColumnIndexAtFirstRow) {
+            diagonals.push(boardRows[i][j]);
+          }
+        }
+      }
+
+      var value = diagonals.reduce(function(a, b) {
+        return a + b;
+      });
+
+
+      if (value > 1) {
+        return true;
+      } else {
+        return false;
+      }
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var boardRows = this.rows();
+      var diagonalInstances = {};
+      var diagonalToCheck;
+      var areConflicts = false;
+
+      for (var i = 0; i < boardRows.length; i++) {
+        for (var j = 0; j < boardRows[i].length; j++) {
+          diagonalToCheck = this._getFirstRowColumnIndexForMajorDiagonalOn(i, j);
+          if ((boardRows[i][j] === 1) && !(diagonalInstances.hasOwnProperty(diagonalToCheck))) {
+            diagonalInstances[diagonalToCheck] = this.hasMajorDiagonalConflictAt(diagonalToCheck);
+          }
+        }
+      }
+
+      for (var diagonal in diagonalInstances) {
+        if (diagonalInstances[diagonal] === true) {
+          areConflicts = true;
+          break;
+        }
+      }
+
+      return areConflicts;
     },
 
 
@@ -162,12 +205,55 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var boardRows = this.rows();
+      var diagonals = [];
+
+      //Loop through boardRows, and for each index
+      for (var i = 0; i < boardRows.length; i++) {
+        for (var j = boardRows[i].length - 1; j >= 0; j--) {
+          var result = this._getFirstRowColumnIndexForMinorDiagonalOn(i, j);
+          if (result === minorDiagonalColumnIndexAtFirstRow) {
+            diagonals.push(boardRows[i][j]);
+          }
+        }
+      }
+
+      var value = diagonals.reduce(function(a, b) {
+        return a + b;
+      });
+
+
+      if (value > 1) {
+        return true;
+      } else {
+        return false;
+      }
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var boardRows = this.rows();
+      var diagonalInstances = {};
+      var diagonalToCheck;
+      var areConflicts = false;
+
+      for (var i = 0; i < boardRows.length; i++) {
+        for (var j = boardRows[i].length - 1; j >= 0; j--) {
+          diagonalToCheck = this._getFirstRowColumnIndexForMinorDiagonalOn(i, j);
+          if ((boardRows[i][j] === 1) && !(diagonalInstances.hasOwnProperty(diagonalToCheck))) {
+            diagonalInstances[diagonalToCheck] = this.hasMinorDiagonalConflictAt(diagonalToCheck);
+          }
+        }
+      }
+
+      for (var diagonal in diagonalInstances) {
+        if (diagonalInstances[diagonal] === true) {
+          areConflicts = true;
+          break;
+        }
+      }
+
+      return areConflicts; // fixme
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
