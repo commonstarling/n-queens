@@ -79,9 +79,18 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      var answer = rowIndex.reduce(function(a, b) {
-        return a + b;
-      });
+      var answer;
+      if (Array.isArray(rowIndex)){
+        answer = rowIndex.reduce(function(a, b) {
+          return a + b;
+        });
+      } else if (typeof rowIndex === 'number') {
+        var boardRows = this.rows();
+        answer = boardRows[rowIndex].reduce(function(a, b) {
+          return a + b;
+        });
+      }
+
 
       if (answer > 1) {
         return true;
@@ -100,7 +109,7 @@
           return true;
         }
       }
-      return false; // fixme
+      return false;
     },
 
 
